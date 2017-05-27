@@ -1,0 +1,72 @@
+group 'com.imooc.gradle'
+version '1.0-SNAPSHOT'
+
+
+allprojects {
+    apply plugin: 'java'
+    sourceCompatibility = 1.8
+
+    //进行项目的发布，可发布到本地仓库，也可以发布到maven私服，发布到maven仓库需要注册并审核
+    apply plugin: 'maven-publish'
+
+    publishing {
+        publications {
+            myPublish(MavenPublication) {
+                from components.java
+            }
+        }
+
+        repositories {
+            maven {
+                name 'myPub'
+                url ''  //maven私服地址
+            }
+        }
+    }
+}
+
+subprojects {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+        compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+
+    }
+
+}
+
+repositories {
+    mavenCentral()
+}
+
+/*def createDir = {
+    path ->
+        File file = new File(path)
+        if (!file.exists())
+            file.mkdirs()
+}
+
+task makeJavaDir () {
+
+    def paths = ['src/main/java', 'src/main/resources','src/test/java','src/test/resources']
+
+    doFirst {
+        paths.forEach(createDir)
+    }
+
+}
+
+task makeWebDir () {
+
+    def paths = ['src/main/webapp','src/test/webapp']
+
+    dependsOn 'makeJavaDir'
+
+    doLast {
+        paths.forEach(createDir)
+    }
+
+}*/
